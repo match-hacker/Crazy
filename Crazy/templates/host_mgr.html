@@ -1,0 +1,142 @@
+{% extends 'index.html' %}
+
+{% block page-content %}
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="panel-heading">
+                    <span class="panel-title">可操作主机列表</span>
+                    <div class="panel-heading-controls">
+                        <button class="btn btn-xs disabled cg-code">Show code</button>
+                    </div>
+                </div> <!-- / .panel-heading -->
+                <div class="panel-body remove-spaces remove-br">
+                    <div class="panel panel-dark panel-colorGeneratorDemo">
+                        <div class="panel-heading">
+                            <span class="panel-title">Panel header</span>
+                            <div class="panel-heading-controls">
+                                <button class="btn btn-xs btn-success btn-outline dark"><span
+                                        class="fa fa-refresh"></span>&nbsp;&nbsp;Refresh
+                                </button>
+                                <button class="btn btn-xs btn-danger btn-outline dark"><span
+                                        class="fa fa-paperclip"></span>
+                                </button>
+                                <div class="btn-group btn-group-xs">
+                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                            data-toggle="dropdown"><span
+                                            class="fa fa-cog"></span>&nbsp;<span class="fa fa-caret-down"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Some header</li>
+                                        <li><a href="#">Separated link</a></li>
+                                    </ul> <!-- / .dropdown-menu -->
+                                </div> <!-- / .btn-group -->
+                            </div> <!-- / .panel-heading-controls -->
+                        </div> <!-- / .panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group">
+                                {% for host_group in request.user.host_groups.all %}
+                                <a href="#" class="list-group-item" onclick="temToggle(this)">
+                                    <span class="badge badge-info">{{ host_group.host_to_remote_users.count }}</span>
+                                   {{ host_group.name }}
+                                </a>
+                                    <ul>
+                                    {% for host_to_user_obj in host_group.host_to_remote_users.all %}
+                                        <li><input type="checkbox" value="{{ host_to_user_obj.id }}" tag="host-select">{{ host_to_user_obj.host.name }}({{ host_to_user_obj.host.ip_addr }}) @{{ host_to_user_obj.remote_user.username }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endfor %}
+                                    <a href="#" class="list-group-item" onclick="temToggle(this)">
+                                    <span class="badge badge-info">{{ request.user.host_to_remote_users.count }}</span>
+                                   未分组
+                                </a>
+                            <ul>
+                                    {% for host_to_user_obj in request.user.host_to_remote_users.all %}
+                                        <li><input type="checkbox" value="{{ host_to_user_obj.id }}" tag="host-select">{{ host_to_user_obj.host.name }}({{ host_to_user_obj.host.ip_addr }}) @{{ host_to_user_obj.remote_user.username }}</li>
+                                        {% endfor %}
+                                    </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- / .panel-body -->
+            </div>
+        </div>
+          <div class="col-sm-8">
+            <div class="panel">
+                <div class="panel-heading">
+                    <span class="panel-title">命令操作</span>
+                    <div class="panel-heading-controls">
+                        <button class="btn btn-xs disabled cg-code">Show code</button>
+                    </div>
+                </div> <!-- / .panel-heading -->
+                <div class="panel-body remove-spaces remove-br">
+                    <div class="panel panel-dark panel-colorGeneratorDemo">
+                        <div class="panel-heading">
+                            <span class="panel-title">输入命令</span>
+                            <div class="panel-heading-controls">
+                                <button class="btn btn-xs btn-success btn-outline dark"><span
+                                        class="fa fa-refresh"></span>&nbsp;&nbsp;Refresh
+                                </button>
+                                <button class="btn btn-xs btn-danger btn-outline dark"><span
+                                        class="fa fa-paperclip"></span>
+                                </button>
+                                <div class="btn-group btn-group-xs">
+                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                            data-toggle="dropdown"><span
+                                            class="fa fa-cog"></span>&nbsp;<span class="fa fa-caret-down"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Some header</li>
+                                        <li><a href="#">Separated link</a></li>
+                                    </ul> <!-- / .dropdown-menu -->
+                                </div> <!-- / .btn-group -->
+                            </div> <!-- / .panel-heading-controls -->
+                        </div> <!-- / .panel-heading -->
+                        <div class="panel-body">
+                           <textarea id="cmd_input" class="form-control" placeholder="input your cmd..."></textarea>
+                            <input type="button" id="task_submit_btn" onclick="PostTask(this, 'cmd')" class="btn btn-success pull-right" value="执行命令">
+                        </div>
+                    </div>
+{% include 'task_result_component.html' %}
+                </div> <!-- / .panel-body -->
+            </div>
+        </div>
+    </div>
+
+{% include 'multitask_js_component.html' %}
+{% endblock page-content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
